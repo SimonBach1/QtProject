@@ -2,6 +2,7 @@
 #define COOKIECLICKER2_H
 
 #include <QMainWindow>
+#include "ui_market.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class CookieClicker2; }
@@ -20,5 +21,6 @@ private slots: // La section où vous déclarez vos slots
 
 private:
     Ui::CookieClicker2 *ui;
+    Ui::MainWindow market;
 };
 #endif // COOKIECLICKER2_H

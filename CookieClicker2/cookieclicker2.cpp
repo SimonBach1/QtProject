@@ -12,6 +12,7 @@
 CookieClicker2::CookieClicker2(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::CookieClicker2)
+
 {
     //ui->setupUi(this);
     //QPixmap pix("/home/clonestriker/Bureau/Cours/BUT2/C++/CookieClicker2/resources/cookie.png");
@@ -25,16 +26,18 @@ CookieClicker2::CookieClicker2(QWidget *parent)
     //connect(clickable, &ClickableImage::clicked, this, &CookieClicker2::onImageClicked);
 
     ui->setupUi(this);
+    market.setupUi(this);
 
 
+       QStackedWidget *stackedWidget = new QStackedWidget(this);
+       setCentralWidget(stackedWidget);
 
-        QStackedWidget *stackedWidget = new QStackedWidget;
+       QWidget *firstPageWidget = ui->cookiePage;
+       stackedWidget->addWidget(firstPageWidget);
 
-        // Création du premier widget et configuration via l'UI générée
-        QMainWindow *firstPageWindow = new QMainWindow;
-        Ui::CookieClicker2 firstPageUi;
-        firstPageUi.setupUi(firstPageWindow);
-        stackedWidget->addWidget(firstPageWindow);
+
+       QWidget *secondPageWidget = market.marketPage;
+       stackedWidget->addWidget(secondPageWidget);
 
 
 
@@ -47,7 +50,13 @@ CookieClicker2::CookieClicker2(QWidget *parent)
 
 
 
+        QObject::connect(ui->marketButton, &QPushButton::clicked, [=]() {
+             stackedWidget->setCurrentWidget(secondPageWidget);
+          });
 
+        QObject::connect(market.pushButton, &QPushButton::clicked, [=]() {
+             stackedWidget->setCurrentWidget(firstPageWidget);
+          });
         connect(clickableImage, &ClickableImage::clicked, this, &CookieClicker2::onImageClicked);
 
 
