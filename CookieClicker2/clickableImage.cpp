@@ -1,15 +1,8 @@
-#include "clickableImage.h"
-#include <QMouseEvent>
+#include "clickableimage.h"
 
-// Constructeur
-ClickableImage::ClickableImage(QString text, QWidget *parent)
-    : QLabel(text, parent) {
-}
+ClickableImage::ClickableImage()
+{
 
 
-void ClickableImage::mousePressEvent(QMouseEvent *event) {
 
-    QLabel::mousePressEvent(event);
-
-    emit clicked();
 }

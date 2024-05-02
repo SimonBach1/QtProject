@@ -32,6 +32,8 @@ set(PROJECT_SOURCES
         cookieclicker2.cpp
         cookieclicker2.h
         cookieclicker2.ui
+        customdelegate.cpp
+        customdelegate.h
         market.ui
         ${TS_FILES}
         ${UI_HEADERS}

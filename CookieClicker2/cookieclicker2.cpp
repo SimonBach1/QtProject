@@ -5,8 +5,10 @@
 #include <QString>
 #include "MoneyManager.h"
 #include <QStackedWidget>
+#include <QStandardItemModel>
 #include "ui_market.h"
 #include "ui_cookieclicker2.h"
+#include "customdelegate.h"
 
 
 CookieClicker2::CookieClicker2(QWidget *parent)
@@ -38,6 +40,28 @@ CookieClicker2::CookieClicker2(QWidget *parent)
 
        QWidget *secondPageWidget = market.marketPage;
        stackedWidget->addWidget(secondPageWidget);
+
+       QStandardItemModel *model = new QStandardItemModel();
+
+
+       QListView * listItems = market.listView;
+
+       listItems->setModel(model);
+
+       for (int i = 0;i <10 ;i++ ) {
+           QStandardItem *item = new QStandardItem();
+               QString text = "Exemple d'Item n°" + QString::number(i);
+               item->setText(text);
+               item->setIcon(QIcon("/home/clonestriker/Bureau/Cours/BUT2/C++/CookieClicker2/resources/cookie.png"));
+               model->appendRow(item);
+       }
+
+
+
+       CustomDelegate *delegate = new CustomDelegate();
+       listItems->setItemDelegate(delegate);
+
+
 
 
 
