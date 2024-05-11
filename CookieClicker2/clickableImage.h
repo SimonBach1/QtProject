@@ -9,14 +9,13 @@ class ClickableImage : public QLabel
 {
    Q_OBJECT
 public:
-   ClickableImage(QString text, QWidget *parent = 0) : QLabel(text, parent) {}
-   ~ClickableImage() {}
+   ClickableImage(QString text, QWidget *parent = 0);
 
 signals:
    void clicked();
 
 protected:
-   void mousePressEvent(QMouseEvent *event) { emit clicked(); }
+   void mousePressEvent(QMouseEvent *event);
 };
 
 #endif // CLICKABLEIMAGE_H

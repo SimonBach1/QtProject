@@ -21,6 +21,7 @@ set(TS_FILES CookieClicker2_fr_FR.ts)
 set(UI_FILES
     cookieclicker2.ui
     market.ui
+    item.ui
 )
 qt6_wrap_ui(UI_HEADERS ${UI_FILES})
 
@@ -35,6 +36,8 @@ set(PROJECT_SOURCES
         customdelegate.cpp
         customdelegate.h
         market.ui
+        item.ui
+        resources.qrc
         ${TS_FILES}
         ${UI_HEADERS}
 )

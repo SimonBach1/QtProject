@@ -8,7 +8,9 @@
 #include <QStandardItemModel>
 #include "ui_market.h"
 #include "ui_cookieclicker2.h"
+#include "ui_item.h"
 #include "customdelegate.h"
+#include <QDebug>
 
 
 CookieClicker2::CookieClicker2(QWidget *parent)
@@ -16,19 +18,10 @@ CookieClicker2::CookieClicker2(QWidget *parent)
     , ui(new Ui::CookieClicker2)
 
 {
-    //ui->setupUi(this);
-    //QPixmap pix("/home/clonestriker/Bureau/Cours/BUT2/C++/CookieClicker2/resources/cookie.png");
-    //int w = ui->cookieImage->width();
-    //int h = ui->cookieImage->height();
-
-    //ui->cookieImage->setPixmap(pix.scaled(w,h,Qt::KeepAspectRatio));
-
-    //ClickableImage* clickable = new ClickableImage("",ui->cookieImage);
-    //clickable->setPixmap(pix.scaled(w,h,Qt::KeepAspectRatio));
-    //connect(clickable, &ClickableImage::clicked, this, &CookieClicker2::onImageClicked);
 
     ui->setupUi(this);
     market.setupUi(this);
+    itemWindow.setupUi(this);
 
 
        QStackedWidget *stackedWidget = new QStackedWidget(this);
@@ -41,6 +34,13 @@ CookieClicker2::CookieClicker2(QWidget *parent)
        QWidget *secondPageWidget = market.marketPage;
        stackedWidget->addWidget(secondPageWidget);
 
+       QWidget *thirdPageWidget = itemWindow.itemPage;
+       QPixmap pix(":/img/resources/cookie.png");
+       int w = ui->cookieImage->width();
+       int h = ui->cookieImage->height();
+       itemWindow.image->setPixmap(pix.scaled(w, h, Qt::KeepAspectRatio));
+       stackedWidget->addWidget(thirdPageWidget);
+
        QStandardItemModel *model = new QStandardItemModel();
 
 
@@ -52,8 +52,9 @@ CookieClicker2::CookieClicker2(QWidget *parent)
            QStandardItem *item = new QStandardItem();
                QString text = "Exemple d'Item n°" + QString::number(i);
                item->setText(text);
-               item->setIcon(QIcon("/home/clonestriker/Bureau/Cours/BUT2/C++/CookieClicker2/resources/cookie.png"));
+               item->setIcon(QIcon(":/img/resources/cookie.png"));
                model->appendRow(item);
+
        }
 
 
@@ -67,9 +68,8 @@ CookieClicker2::CookieClicker2(QWidget *parent)
 
 
         ClickableImage* clickableImage = new ClickableImage("", ui->cookieImage);
-        QPixmap pix("/home/clonestriker/Bureau/Cours/BUT2/C++/CookieClicker2/resources/cookie.png");
-        int w = ui->cookieImage->width();
-        int h = ui->cookieImage->height();
+        w= ui->cookieImage->width();
+        h = ui->cookieImage->height();
         clickableImage->setPixmap(pix.scaled(w, h, Qt::KeepAspectRatio));
 
 
@@ -84,14 +84,18 @@ CookieClicker2::CookieClicker2(QWidget *parent)
         connect(clickableImage, &ClickableImage::clicked, this, &CookieClicker2::onImageClicked);
 
 
-
-
-
-
+        QObject::connect(delegate, &CustomDelegate::buttonClicked,[=]() {
+            stackedWidget->setCurrentWidget(thirdPageWidget);
+        });
 
 
 
 }
+
+void CookieClicker2::handleButtonClicked(const QModelIndex &index) {
+
+}
+
 
 void CookieClicker2::onImageClicked(){
     qDebug() << "Image cliquée!";

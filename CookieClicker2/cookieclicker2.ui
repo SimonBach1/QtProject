@@ -115,7 +115,7 @@
        <property name="sizeHint" stdset="0">
         <size>
          <width>20</width>
-         <height>100</height>
+         <height>50</height>
         </size>
        </property>
       </spacer>
@@ -145,8 +145,8 @@
         <widget class="QLabel" name="cookieImage">
          <property name="minimumSize">
           <size>
-           <width>400</width>
-           <height>400</height>
+           <width>600</width>
+           <height>600</height>
           </size>
          </property>
          <property name="maximumSize">

@@ -1,5 +1,7 @@
 // customdelegate.cpp
 #include "customdelegate.h"
+#include <QMouseEvent>
+#include <QDebug>
 
 CustomDelegate::CustomDelegate(QObject *parent)
     : QStyledItemDelegate(parent) {}
@@ -29,6 +31,9 @@ void CustomDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     buttonOption.rect = buttonRect;
     buttonOption.text = "Acheter";
     buttonOption.state = QStyle::State_Enabled | QStyle::State_Active;
+
+
+
     QApplication::style()->drawControl(QStyle::CE_PushButton, &buttonOption, painter);
 
     QPen pen(Qt::black, 2);  // Noir, épaisseur de 2 pixels
@@ -39,8 +44,20 @@ void CustomDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
 }
 
 bool CustomDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) {
+    if (event->type() == QEvent::MouseButtonRelease) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent *>(event);
+            int buttonWidth = 200;
+        QRect entireRect = option.rect;
+        QRect buttonRect = QRect(entireRect.right() - buttonWidth-10, entireRect.top()+entireRect.height()/4, buttonWidth, entireRect.height()/2);
+        if (buttonRect.contains(mouseEvent->pos())) {
+            qDebug() << "Button clicked at release";
+            emit buttonClicked(index);
+            return true;
+        }
+    }
     return QStyledItemDelegate::editorEvent(event, model, option, index);
 }
+
 
 QSize CustomDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
     // Taille par défaut de l'élément, peut-être basée sur le contenu
