@@ -1,5 +1,12 @@
 <RCC>
     <qresource prefix="/img">
         <file>resources/cookie.png</file>
+        <file>resources/patissier.png</file>
+        <file>resources/four.png</file>
+        <file>resources/machine.png</file>
+        <file>resources/usine.png</file>
+        <file>resources/zone.png</file>
+        <file>resources/ville.png</file>
     </qresource>
+    
 </RCC>

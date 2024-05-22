@@ -17,7 +17,7 @@ public:
     CookieClicker2(QWidget *parent = nullptr);
     ~CookieClicker2();
 
-private slots: // La section où vous déclarez vos slots
+public slots: // La section où vous déclarez vos slots
     void onImageClicked();
     void handleButtonClicked(const QModelIndex &index);
 
