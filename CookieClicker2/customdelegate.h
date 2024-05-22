@@ -16,8 +16,12 @@ public:
     bool editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index) override;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
+private:
+    bool buttonHovered = false;
+
 signals:
     void buttonClicked(const QModelIndex &index);
+    void buttonHoverStateChanged(const QModelIndex &index, bool hovered);
 };
 
 #endif // CUSTOMDELEGATE_H

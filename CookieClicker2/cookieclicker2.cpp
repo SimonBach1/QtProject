@@ -29,11 +29,27 @@ CookieClicker2::CookieClicker2(QWidget *parent)
                                     "La zone industrielle est vaste, elle permet de produire plein de cookie, 500 par seconde",
                                     "La ville cookie est magnifique ! Elle permet une production de 1000 par seconde"};
 
+    QString buttonStyle =                    "QPushButton {"
+                                             "    background-color: rgb(171,171,171);"
+                                             "    color: white;"
+                                             "font: bold 20px;"
+                                             "    border-radius: 15px;"
+                                             "    padding: 10px 20px;"
+                                             "    border: none;"
+                                             "}"
+                                             "QPushButton:hover {"
+                                             "    background-color: rgb(100,100,100);"
+                                             "}";
 
 
     ui->setupUi(this);
     market.setupUi(this);
     itemWindow.setupUi(this);
+
+       ui->marketButton->setStyleSheet(buttonStyle);
+       market.pushButton->setStyleSheet(buttonStyle);
+       itemWindow.returnButton->setStyleSheet(buttonStyle);
+       itemWindow.buy->setStyleSheet(buttonStyle);
 
 
        QStackedWidget *stackedWidget = new QStackedWidget(this);
@@ -67,13 +83,13 @@ CookieClicker2::CookieClicker2(QWidget *parent)
                item->setIcon(QIcon(":/img/resources/"+QString::fromStdString(itemImagePath[i])));
                model->appendRow(item);
 
+
        }
 
 
 
        CustomDelegate *delegate = new CustomDelegate();
-       listItems->setItemDelegate(delegate);
-
+       listItems->setItemDelegate(delegate); listItems->setMouseTracking(true);
 
 
 
@@ -116,6 +132,13 @@ CookieClicker2::CookieClicker2(QWidget *parent)
             itemWindow.image->setPixmap(pix.scaled(w, h, Qt::KeepAspectRatio));
             stackedWidget->setCurrentWidget(thirdPageWidget);
         });
+
+        QObject::connect(delegate, &CustomDelegate::buttonHoverStateChanged,[=](const QModelIndex &index, bool hovered){
+          qDebug() << "emit ";
+          listItems->update(index);
+        });
+
+
 
 
 
