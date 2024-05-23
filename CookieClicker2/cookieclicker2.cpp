@@ -45,6 +45,9 @@ CookieClicker2::CookieClicker2(QWidget *parent)
     ui->setupUi(this);
     market.setupUi(this);
     itemWindow.setupUi(this);
+    int money = MoneyManager::instance().getMoney();
+        QString money_string = QString::number(money);
+    ui->money->setText(money_string);
 
        ui->marketButton->setStyleSheet(buttonStyle);
        market.pushButton->setStyleSheet(buttonStyle);
