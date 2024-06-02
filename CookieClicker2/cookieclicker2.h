@@ -5,6 +5,7 @@
 #include <QStackedWidget>
 #include "ui_market.h"
 #include "ui_item.h"
+#include <QTimer>
 QT_BEGIN_NAMESPACE
 namespace Ui { class CookieClicker2; }
 QT_END_NAMESPACE
@@ -20,11 +21,15 @@ public:
 public slots: // La section où vous déclarez vos slots
     void onImageClicked();
     void handleButtonClicked(const QModelIndex &index);
+    void onTimeout();
+
 
 private:
     Ui::CookieClicker2 *ui;
     Ui::marketWIndow market;
     Ui::itemWindow itemWindow;
+    int currentIndex;
+    QTimer *timer;
 
 
 };

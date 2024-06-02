@@ -2,6 +2,8 @@
 #define MONEYMANAGER_H
 
 #include <QSettings>
+#include <QCoreApplication>
+#include <QDir>
 
 class MoneyManager {
 public:
@@ -25,12 +27,15 @@ private:
     int money = 0;
 
     void saveMoney() {
-        QSettings settings("MonApp", "AppSettings");
+        QString buildPath = QDir(QCoreApplication::applicationDirPath()).filePath("build_settings.ini");
+        QSettings settings(buildPath, QSettings::IniFormat);
         settings.setValue("money", money);
+        settings.sync();
     }
 
     void loadMoney() {
-        QSettings settings("MonApp", "AppSettings");
+        QString buildPath = QDir(QCoreApplication::applicationDirPath()).filePath("build_settings.ini");
+        QSettings settings(buildPath, QSettings::IniFormat);
         money = settings.value("money", 0).toInt();
     }
 

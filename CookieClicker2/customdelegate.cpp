@@ -32,18 +32,6 @@ void CustomDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
     buttonOption.text = "Acheter";
     buttonOption.state = QStyle::State_Enabled | QStyle::State_Active;
 
-    QString buttonStyle =                    "QPushButton {"
-                                             "    background-color: rgb(171,171,171);"
-                                             "    color: white;"
-                                             "font: bold 20px;"
-                                             "    border-radius: 15px;"
-                                             "    padding: 10px 20px;"
-                                             "    border: none;"
-                                             "}"
-                                             "QPushButton:hover {"
-                                             "    background-color: rgb(100,100,100);"
-                                             "}";
-
 
 
     QFont buttonFont = painter->font();
@@ -54,7 +42,7 @@ void CustomDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option
        QColor textColor = QColor("white");
        QColor hoverColor = QColor(100, 100, 100);
        if (buttonHovered) {
-               qDebug() << "refresh";
+               //qDebug() << "refresh";
                buttonColor = hoverColor;
            } else {
                buttonColor = defaultColor;
@@ -89,7 +77,7 @@ bool CustomDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const
         QRect entireRect = option.rect;
         QRect buttonRect = QRect(entireRect.right() - buttonWidth-10, entireRect.top()+entireRect.height()/4, buttonWidth, entireRect.height()/2);
         if (buttonRect.contains(mouseEvent->pos())) {
-            qDebug() << "Button clicked at release";
+            //qDebug() << "Button clicked at release";
             emit buttonClicked(index);
             buttonHovered = false;
             return true;

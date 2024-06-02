@@ -28,6 +28,7 @@ qt6_wrap_ui(UI_HEADERS ${UI_FILES})
 set(PROJECT_SOURCES
         main.cpp
         MoneyManager.h
+        ItemManager.h
         clickableImage.h
         clickableImage.cpp
         cookieclicker2.cpp
