@@ -5,6 +5,7 @@
 #include <QStackedWidget>
 #include "ui_market.h"
 #include "ui_item.h"
+#include "ui_stat.h"
 #include <QTimer>
 QT_BEGIN_NAMESPACE
 namespace Ui { class CookieClicker2; }
@@ -28,6 +29,7 @@ private:
     Ui::CookieClicker2 *ui;
     Ui::marketWIndow market;
     Ui::itemWindow itemWindow;
+    Ui::Stat stat;
     int currentIndex;
     QTimer *timer;
 

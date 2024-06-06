@@ -11,7 +11,9 @@
 #include "ui_cookieclicker2.h"
 #include "ui_item.h"
 #include "customdelegate.h"
+#include "StatManager.h"
 #include <QDebug>
+#include "CustomGraph.cpp"
 
 
 CookieClicker2::CookieClicker2(QWidget *parent)
@@ -62,16 +64,20 @@ CookieClicker2::CookieClicker2(QWidget *parent)
     ui->setupUi(this);
     market.setupUi(this);
     itemWindow.setupUi(this);
+    stat.setupUi(this);
     int money = MoneyManager::instance().getMoney();
     QString money_string = QString::number(money);
     ui->money->setText(money_string);
     market.money->setText(money_string);
+    stat.money_2->setText(money_string);
     market.money->setStyleSheet(label_money);
     market.label->setStyleSheet(label_money);
     ui->money->setStyleSheet(label_money);
     ui->label->setStyleSheet(label_money);
     itemWindow.money->setStyleSheet(label_money);
     itemWindow.label->setStyleSheet(label_money);
+    stat.money_2->setStyleSheet(label_money);
+    stat.label_2->setStyleSheet(label_money);
 
 
 
@@ -79,6 +85,12 @@ CookieClicker2::CookieClicker2(QWidget *parent)
        market.pushButton->setStyleSheet(buttonStyle);
        itemWindow.returnButton->setStyleSheet(buttonStyle);
        itemWindow.buy->setStyleSheet(buttonStyle);
+       ui->statButton->setStyleSheet(buttonStyle);
+       stat.cookieButton->setStyleSheet(buttonStyle);
+
+       stat.nbClick->setStyleSheet("font-size: 18pt;");
+       stat.nbArgentTotal->setStyleSheet("font-size: 18pt;");
+       stat.timeTotal->setStyleSheet("font-size: 18pt;");
 
 
 
@@ -98,6 +110,11 @@ CookieClicker2::CookieClicker2(QWidget *parent)
        int h = ui->cookieImage->height();
        itemWindow.image->setPixmap(pix.scaled(w, h, Qt::KeepAspectRatio));
        stackedWidget->addWidget(thirdPageWidget);
+
+
+       QWidget *fourthPageWidget = stat.statPage;
+       stackedWidget->addWidget(fourthPageWidget);
+
 
        QStandardItemModel *model = new QStandardItemModel();
 
@@ -133,7 +150,34 @@ CookieClicker2::CookieClicker2(QWidget *parent)
              market.money->setText(money_string);
           });
 
+        QObject::connect(ui->statButton, &QPushButton::clicked, [=]() {
+             stackedWidget->setCurrentWidget(fourthPageWidget);
+
+             int money = MoneyManager::instance().getMoney();
+             QString money_string = QString::number(money);
+             stat.money_2->setText(money_string);
+
+             money = StatManager::instance().getTotalMoney();
+             money_string = QString::number(money);
+             stat.nbArgentTotal->setText("Nombre total d'argent gagné : "+money_string);
+
+             int clickcount = StatManager::instance().getClickCount();
+             QString click_string = QString::number(clickcount);
+             stat.nbClick->setText("Nombre total de clique effectué : "+click_string);
+
+             QTime tempsTotal = StatManager::instance().getTempsTotal();
+             stat.timeTotal->setText("Temps de jeu total : "+tempsTotal.toString("hh:mm:ss"));
+
+             CustomGraph *graph = new CustomGraph(stat.graph);
+             graph->show();
+
+          });
+
         QObject::connect(market.pushButton, &QPushButton::clicked, [=]() {
+             stackedWidget->setCurrentWidget(firstPageWidget);
+          });
+
+        QObject::connect(stat.cookieButton, &QPushButton::clicked, [=]() {
              stackedWidget->setCurrentWidget(firstPageWidget);
           });
         QObject::connect(itemWindow.returnButton, &QPushButton::clicked, [=]() {
@@ -195,6 +239,9 @@ void CookieClicker2::onImageClicked(){
     money = MoneyManager::instance().setMoney(money);
     QString s = QString::number(money);
     ui->money->setText(s);
+    StatManager::instance().addToTotalMoney(1);
+    StatManager::instance().incrementClickCount();
+
 }
 
 CookieClicker2::~CookieClicker2()
@@ -215,11 +262,28 @@ void CookieClicker2::onTimeout()
     int moneyAdd = n1*nbCookies[0] + n2*nbCookies[1] + n3*nbCookies[2] + n4*nbCookies[3] + n5*nbCookies[4] + n6*nbCookies[5];
     int money = MoneyManager::instance().getMoney();
     MoneyManager::instance().setMoney(money+moneyAdd);
+    money = MoneyManager::instance().getMoney();
     QString s = QString::number(money);
     ui->money->setText(s);
     itemWindow.money->setText(s);
     market.money->setText(s);
+    stat.money_2->setText(s);
+    StatManager::instance().addToTotalMoney(moneyAdd);
+
+    money = StatManager::instance().getTotalMoney();
+    QString money_string = QString::number(money);
+    stat.nbArgentTotal->setText("Nombre total d'argent gagné : "+money_string);
     QString smoney = QString::number(moneyAdd);
+
+    StatManager::instance().updateTempsTotal();
+
+    QTime tempsTotal = StatManager::instance().getTempsTotal();
+    stat.timeTotal->setText("Temps de jeu total : "+tempsTotal.toString("hh:mm:ss"));
+
+    CustomGraph *graph = new CustomGraph(stat.graph);
+    graph->show();
+
     qDebug() << "nb cookie : "+smoney;
+
 }
 
