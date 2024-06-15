@@ -24,7 +24,7 @@ public:
         if (dataPoints.isEmpty()) return;
 
         int numPoints = dataPoints.size();
-        int startIndex = 0; // Index of the starting point
+        int startIndex = 0;
 
         int maxX = 0;
         int minY = INT_MAX;
@@ -51,24 +51,20 @@ public:
             int x2 = dataPoints[i + 1].first.hour() * 3600 + dataPoints[i + 1].first.minute() * 60 + dataPoints[i + 1].first.second();
             int y2 = dataPoints[i + 1].second;
 
-            // Calculate the x position of the line
             int xPos1 = (i * xSize) / (numPoints - 1);
             int xPos2 = ((i + 1) * xSize) / (numPoints - 1);
 
-            // Calculate the y position of the points
             float yPos1 = ySize - ((y1 - minY) / float(maxY - minY) * ySize);
             float yPos2 = ySize - ((y2 - minY) / float(maxY - minY) * ySize);
 
-            qDebug() << "yPos1:" << yPos1 << " yPos2:" << yPos2;
-            qDebug() << "ymin:" << minY << " maxY:" << maxY;
+            //qDebug() << "yPos1:" << yPos1 << " yPos2:" << yPos2;
+            //qDebug() << "ymin:" << minY << " maxY:" << maxY;
 
 
 
-            // Add line
             scene->addLine(xPos1, yPos1, xPos2, yPos2, pen);
         }
 
-        // Add time labels for the first and last points
         if (numPoints > 0) {
             QGraphicsTextItem *timeLabelStart = new QGraphicsTextItem(dataPoints[startIndex].first.toString("hh:mm:ss"));
             timeLabelStart->setPos(-20, ySize + 10);
@@ -88,24 +84,20 @@ public:
         }
 
         QPen axisPen(Qt::black, 1);
-        scene->addLine(0, 0, 0, ySize, axisPen); // Y axis
-        scene->addLine(0, ySize, xSize, ySize, axisPen); // X axis
+        scene->addLine(0, 0, 0, ySize, axisPen);
+        scene->addLine(0, ySize, xSize, ySize, axisPen);
 
-        // Add 10 graduations on the X axis
         for (int i = 0; i <= 10; ++i) {
             int xPos = (i * xSize) / 10;
-            scene->addLine(xPos, ySize, xPos, ySize + 5, axisPen); // Graduation line
+            scene->addLine(xPos, ySize, xPos, ySize + 5, axisPen);
 
             float yInterval = ySize / 10;
-            // Position of the graduation line
             float yPos = ySize - (i * yInterval);
 
-            // Add the graduation line
             scene->addLine(-5, yPos, 0, yPos, axisPen);
         }
 
 
-        // Add labels for axes
         QGraphicsTextItem *xLabel = new QGraphicsTextItem("Temps");
         xLabel->setPos(xSize / 2 - xLabel->boundingRect().width() / 2, ySize);
         scene->addItem(xLabel);

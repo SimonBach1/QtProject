@@ -263,7 +263,7 @@
             <enum>QFrame::NoFrame</enum>
            </property>
            <property name="text">
-            <string>jDESCRIPTION DESCRIPTION Y3GYUDGGHGDHDZGEHDBHBDHBHJBHBHBHBHBHBHBHBHBHBHBBH,  Kk?KKKJBBJBJBBJBJBJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJJBHBHBHBHhb DESCRIPTION</string>
+            <string/>
            </property>
            <property name="textFormat">
             <enum>Qt::AutoText</enum>
@@ -312,6 +312,26 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="bottomMargin">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="nbItem">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::NoTextInteraction</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
        <item>
         <spacer name="verticalSpacer_2">

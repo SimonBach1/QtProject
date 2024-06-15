@@ -7,6 +7,9 @@
 #include "ui_item.h"
 #include "ui_stat.h"
 #include <QTimer>
+#include <QParallelAnimationGroup>
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class CookieClicker2; }
 QT_END_NAMESPACE
@@ -26,12 +29,14 @@ public slots: // La section où vous déclarez vos slots
 
 
 private:
+    QParallelAnimationGroup *animationGroup;
     Ui::CookieClicker2 *ui;
     Ui::marketWIndow market;
     Ui::itemWindow itemWindow;
     Ui::Stat stat;
     int currentIndex;
     QTimer *timer;
+    bool isAnimationRunning;
 
 
 };

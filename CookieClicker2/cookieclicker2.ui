@@ -64,8 +64,8 @@
         <widget class="QLabel" name="label">
          <property name="maximumSize">
           <size>
-           <width>500</width>
-           <height>500</height>
+           <width>200</width>
+           <height>60</height>
           </size>
          </property>
          <property name="frameShape">
@@ -81,7 +81,7 @@
          <property name="maximumSize">
           <size>
            <width>500</width>
-           <height>500</height>
+           <height>60</height>
           </size>
          </property>
          <property name="frameShape">

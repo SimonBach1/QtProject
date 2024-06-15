@@ -14,11 +14,16 @@
 #include "StatManager.h"
 #include <QDebug>
 #include "CustomGraph.cpp"
+#include <QPropertyAnimation>
+#include <QSequentialAnimationGroup>
+#include <QParallelAnimationGroup>
 
 
 CookieClicker2::CookieClicker2(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::CookieClicker2)
+    , animationGroup(nullptr)
+    ,isAnimationRunning(false)
 
 {
 
@@ -28,6 +33,7 @@ CookieClicker2::CookieClicker2(QWidget *parent)
     //int itemNumber[] = {0,0,0,0,0,0};
 
     std::string itemName[] = {"Le patissier","Le four automatisé","La machine futuriste","L'usine à cookie","La zone industrielle","La ville cookie"};
+    std::string itemFormatName[] = {"patissier(s)","four automatisé(s)","machine(s) futuriste(s)","usine(s) à cookies","zone(s) industrielle(s)","ville(s) cookie(s)"};
     std::string itemDescription[] = {"Le patissier va travailler jour et nuit pour faire des cookies ! Il va en faire 1 par seconde",
                                      "Le four automatisé est très fiable, il va pouvoir faire des cookies sans s'arrêter au nombre de 5 par seconde",
                                     "La machine futuriste est incroyable ! Elle produit des cookies à la chaine , 25 par seconde",
@@ -59,7 +65,6 @@ CookieClicker2::CookieClicker2(QWidget *parent)
        timer = new QTimer(this);
        connect(timer, &QTimer::timeout, this, &CookieClicker2::onTimeout);
        timer->start(1000); // Démarrer le timer avec un intervalle de 1000 ms (1 seconde)
-
 
     ui->setupUi(this);
     market.setupUi(this);
@@ -191,6 +196,7 @@ CookieClicker2::CookieClicker2(QWidget *parent)
             itemWindow.description->setText(QString::fromStdString(itemDescription[index.row()]));
             itemWindow.description->setStyleSheet("font-size: 18pt;");
             itemWindow.prix->setStyleSheet("font-size: 18pt;");
+            itemWindow.nbItem->setStyleSheet("font-size: 18pt;");
             itemWindow.description->adjustSize();
             itemWindow.descriptionLayout->update();
             itemWindow.prix->setText("Prix : "+ItemManager::instance().getItemPrice(index.row()));
@@ -201,6 +207,7 @@ CookieClicker2::CookieClicker2(QWidget *parent)
             int money = MoneyManager::instance().getMoney();
             QString money_string = QString::number(money);
             itemWindow.money->setText(money_string);
+            itemWindow.nbItem->setText("Vous avez actuellement "+QString::number(ItemManager::instance().getItemNumber(index.row()))+" "+QString::fromStdString(itemFormatName[index.row()]));
             int row = index.row();
             this->currentIndex = index.row();
         });
@@ -218,6 +225,8 @@ CookieClicker2::CookieClicker2(QWidget *parent)
                 int newMoney = MoneyManager::instance().getMoney() - ItemManager::instance().getItemPrice(currentIndex).toInt();
                 MoneyManager::instance().setMoney(newMoney);
             }
+            itemWindow.nbItem->setText("Vous avez actuellement "+QString::number(ItemManager::instance().getItemNumber(currentIndex))+" "+QString::fromStdString(itemFormatName[currentIndex]));
+
         });
 
 
@@ -233,15 +242,57 @@ void CookieClicker2::handleButtonClicked(const QModelIndex &index) {
 
 
 
-void CookieClicker2::onImageClicked(){
-    //qDebug() << "Image cliquée!";
-    int money = MoneyManager::instance().getMoney()+1;
-    money = MoneyManager::instance().setMoney(money);
+void CookieClicker2::onImageClicked() {
+    // Vérifiez si une animation est en cours
+
+
+    qDebug() << "Image cliquée!";
+    int money = MoneyManager::instance().getMoney() + 1;
+    MoneyManager::instance().setMoney(money);
     QString s = QString::number(money);
     ui->money->setText(s);
     StatManager::instance().addToTotalMoney(1);
     StatManager::instance().incrementClickCount();
 
+    if (isAnimationRunning) {
+            return;
+        }
+
+
+    // Scale animation
+    QPropertyAnimation *scaleUp = new QPropertyAnimation(ui->cookieImage, "geometry");
+    scaleUp->setDuration(100);
+    QRect startRect = ui->cookieImage->geometry();
+    QRect endRect = QRect(startRect.x() - 10, startRect.y() - 10, startRect.width() + 20, startRect.height() + 20);
+    scaleUp->setStartValue(startRect);
+    scaleUp->setEndValue(endRect);
+
+    QPropertyAnimation *scaleDown = new QPropertyAnimation(ui->cookieImage, "geometry");
+    scaleDown->setDuration(100);
+    scaleDown->setStartValue(endRect);
+    scaleDown->setEndValue(startRect);
+
+    QSequentialAnimationGroup *scaleGroup = new QSequentialAnimationGroup;
+    scaleGroup->addAnimation(scaleUp);
+    scaleGroup->addAnimation(scaleDown);
+
+
+
+    if (animationGroup) {
+        animationGroup->deleteLater();
+    }
+
+    animationGroup = new QParallelAnimationGroup;
+    animationGroup->addAnimation(scaleGroup);
+
+        connect(animationGroup, &QParallelAnimationGroup::finished, this, [=]() {
+            isAnimationRunning = false;
+            animationGroup->deleteLater();
+            animationGroup = nullptr;
+        });
+        isAnimationRunning = true;
+
+    animationGroup->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 CookieClicker2::~CookieClicker2()
